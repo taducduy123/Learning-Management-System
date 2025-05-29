@@ -1,0 +1,1 @@
+<p1>View for Manage Instructor</p1>
