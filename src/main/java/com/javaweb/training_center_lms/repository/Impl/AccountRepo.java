@@ -170,7 +170,7 @@ public class AccountRepo implements IAccountRepo {
         }
 
         try {
-            // Check if account exist
+            // Check if an account exists
             dbConnect.openConnection();
             String sql = """
                     select *
@@ -184,7 +184,7 @@ public class AccountRepo implements IAccountRepo {
             }
             dbConnect.closeResources();
 
-            // Create new account if not exist
+            // Create a new account if not exist
             dbConnect.openConnection();
             sql = """
                     insert into account(role, username, password)

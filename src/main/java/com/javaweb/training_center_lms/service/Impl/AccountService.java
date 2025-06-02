@@ -9,7 +9,7 @@ public class AccountService implements IAccountService {
     private final IAccountRepo accountRepo = new AccountRepo();
 
     @Override
-    public boolean checkAccountExistence(Account account) {
+    public boolean checkAccountExistenceByRole_Username_Password(Account account) {
         if(account == null) {
             return false;
         }
@@ -23,7 +23,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public void saveAccount(Account account) {
-        if(!checkAccountExistence(account)) {
+        if(!checkAccountExistenceByUsername(account)) {
             return;
         }
         accountRepo.saveAccount(account);
@@ -36,7 +36,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public void createAccount(Account account) {
-        if(checkAccountExistence(account)) {
+        if(checkAccountExistenceByRole_Username_Password(account)) {
             return;
         }
         accountRepo.createAccount(account);
@@ -50,5 +50,10 @@ public class AccountService implements IAccountService {
     @Override
     public Account getAccountByRole_Username_Password(String role, String username, String password) {
         return accountRepo.getAccountByRole_Username_Password(role, username, password);
+    }
+
+    @Override
+    public boolean checkAccountExistenceByUsername(Account account) {
+        return accountRepo.getAccountByUsername(account.getUsername()) != null;
     }
 }

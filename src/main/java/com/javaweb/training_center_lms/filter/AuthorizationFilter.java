@@ -9,15 +9,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-public class AuthorizationFilter implements Filter {
+public class AuthorizationFilter implements Filter{
 
     private final SessionUtil sessionUtil = SessionUtil.getInstance();
-    private ServletContext context;
+    // private ServletContext context;
 
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        this.context = filterConfig.getServletContext();
+        Filter.super.init(filterConfig);
     }
 
     @Override
@@ -26,25 +26,31 @@ public class AuthorizationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String url = request.getRequestURI();
+        Account account = (Account) sessionUtil.getValue("account", request);
+        System.out.println("[url, session] = " + "[" + url + ", " + account + "]");
 
-        if(url.startsWith("/controllers/manager")){
-            // Check if the user is authenticated
-            Account account = (Account) sessionUtil.getValue("account", request);
-            if(account != null){
-                if(account.getRole().equalsIgnoreCase("manager")){
-                    filterChain.doFilter(servletRequest, servletResponse);
-                }
-                else{
-                    BaseController.responseRedirectTo("/controllers/LoginController/login?action=login", request, response);
-                }
-            }
-            else {
-                BaseController.responseRedirectTo("/controllers/LoginController/login?action=login", request, response);
-            }
-        }
-        else{
-            filterChain.doFilter(servletRequest, servletResponse);
-        }
+        filterChain.doFilter(servletRequest, servletResponse);
+
+
+//        if(url.startsWith("/controllers/manager")){
+//            // Check if the user is authenticated
+//            Account account = (Account) sessionUtil.getValue("account", request);
+//            if(account != null){
+//                if(account.getRole().equalsIgnoreCase("manager")){
+//                    filterChain.doFilter(servletRequest, servletResponse);
+//                }
+//                else{
+//                    BaseController.responseRedirectTo("/controllers/LoginController/login?action=login", request, response);
+//                }
+//            }
+//            else {
+//                System.out.println("no session");
+//                BaseController.responseRedirectTo("/controllers/LoginController/login?action=login", request, response);
+//            }
+//        }
+//        else{
+//            filterChain.doFilter(servletRequest, servletResponse);
+//        }
     }
 
     @Override

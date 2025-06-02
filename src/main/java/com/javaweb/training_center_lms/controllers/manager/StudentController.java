@@ -24,37 +24,55 @@ public class StudentController extends BaseController {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getPathInfo();
-        if(uri == null || uri.isEmpty()){
+        if (uri == null) {
             uri = "";
         }
+        String action = null;
 
         switch (uri) {
             case "":
-                handleRequest_ViewAllStudents(req, resp);
+                handleRequestGet_ViewAllStudents(req, resp);
                 break;
             case "/search":
-                handleRequest_SearchStudents(req, resp);
+                handleRequestGet_SearchStudents(req, resp);
                 break;
             case "/block":
-                handleRequest_BlockStudent(req, resp);
+                handleRequestGet_BlockStudent(req, resp);
                 break;
             case "/un-block":
-                handleRequest_UnBlockStudent(req, resp);
-                break;
-            case "/edit":
-                handleRequest_EditStudent(req, resp);
-                break;
-            case "/edit/save":
-                handleRequest_EditSave(req, resp);
-                break;
-            case "/edit/back":
-                handleRequest_EditBack(req, resp);
+                handleRequestGet_UnBlockStudent(req, resp);
                 break;
             case "/create":
-                handleRequestGet_CreateStudent(req, resp);
+                action = req.getParameter("action");
+                if (action == null) {
+                    action = "";
+                }
+                switch (action) {
+                    case "showForm":
+                        handleRequestGet_Create_ShowForm(req, resp);
+                        break;
+                    case "back":
+                        handleRequestGet_Create_Back(req, resp);
+                        break;
+                    default:
+                        break;
+                }
                 break;
-            case "/create/back":
-                handleRequestGet_CreateBackStudent(req, resp);
+            case "/edit":
+                action = req.getParameter("action");
+                if (action == null) {
+                    action = "";
+                }
+                switch (action) {
+                    case "showForm":
+                        handleRequestGet_Edit_ShowForm(req, resp);
+                        break;
+                    case "back":
+                        handleRequestGet_Edit_Back(req, resp);
+                        break;
+                    default:
+                        break;
+                }
                 break;
             default:
                 break;
@@ -65,14 +83,31 @@ public class StudentController extends BaseController {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getPathInfo();
-        System.out.println("doPost URI = " + uri);
+        if (uri == null) {
+            uri = "";
+        }
+        String action = null;
 
         switch (uri) {
-            case "/edit/save":
-                handleRequest_EditSave(req, resp);
-                break;
             case "/create":
-                handleRequestPost_CreateStudent(req, resp);
+                action = req.getParameter("action");
+                switch (action) {
+                    case "save":
+                        handleRequestPost_Create_Save(req, resp);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case "/edit":
+                action = req.getParameter("action");
+                switch (action) {
+                    case "save":
+                        handleRequestPost_Edit_Save(req, resp);
+                        break;
+                    default:
+                        break;
+                }
                 break;
             default:
                 break;
@@ -80,100 +115,98 @@ public class StudentController extends BaseController {
     }
 
 
-    public void handleRequest_ViewAllStudents(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("requestType", "view_all");
-        req.setAttribute("allStudents", studentService.getAllStudents());
-        DashboardController.loadContentPane("/views/manager/student.jsp", req, resp);
+    public void handleRequestGet_ViewAllStudents(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("students", studentService.getAllStudents());
+        forwardResquestTo("/views/manager/student.jsp", req, resp);
     }
 
-    public void handleRequest_SearchStudents(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void handleRequestGet_Create_ShowForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Show alert and message from previous request
+        String alert = req.getParameter("alert");
+        String message = req.getParameter("message");
+        req.setAttribute("alert", alert);
+        req.setAttribute("message", message);
+
+        // Load view
+        forwardResquestTo("/views/manager/student-create.jsp", req, resp);
+    }
+
+    public void handleRequestGet_Create_Back(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Redirect view
+        responseRedirectTo("/controllers/manager/StudentController", req, resp);
+    }
+
+    public void handleRequestGet_SearchStudents(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String keyword = req.getParameter("keyword");
-        req.setAttribute("searchedStudents", studentService.getStudentsByName(keyword));
-
-        req.setAttribute("requestType", "search");
-        DashboardController.loadContentPane("/views/manager/student.jsp", req, resp);
+        req.setAttribute("students", studentService.getStudentsByName(keyword));
+        forwardResquestTo("/views/manager/student.jsp", req, resp);
     }
 
-
-    public void handleRequest_BlockStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void handleRequestGet_BlockStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Get data from view
         int id_to_block = Integer.parseInt(req.getParameter("student_id"));
+
+        // Update database
         studentService.blockStudentBy_ID(id_to_block);
 
-        req.setAttribute("requestType", "view_all");
-        req.setAttribute("allStudents", studentService.getAllStudents());
-        DashboardController.loadContentPane("/views/manager/student.jsp", req, resp);
+        // transmit data to view
+        req.setAttribute("students", studentService.getAllStudents());
+
+        // Load view
+        forwardResquestTo("/views/manager/student.jsp", req, resp);
     }
 
-    public void handleRequest_UnBlockStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void handleRequestGet_UnBlockStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Get data from view
         int id_to_unblock = Integer.parseInt(req.getParameter("student_id"));
+
+        // Update database
         studentService.unblockStudentBy_ID(id_to_unblock);
 
-        req.setAttribute("requestType", "view_all");
-        req.setAttribute("allStudents", studentService.getAllStudents());
-        DashboardController.loadContentPane("/views/manager/student.jsp", req, resp);
+        // transmit data to view
+        req.setAttribute("students", studentService.getAllStudents());
+
+        // Load view
+        forwardResquestTo("/views/manager/student.jsp", req, resp);
     }
 
+    public void handleRequestGet_Edit_ShowForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-    public void handleRequest_EditStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Get request from view
+        // Show alert and message from previous request
+        String alert = req.getParameter("alert");
+        String message = req.getParameter("message");
+        req.setAttribute("alert", alert);
+        req.setAttribute("message", message);
+
+        // Get data view
         int student_id = Integer.parseInt(req.getParameter("student_id"));
 
         // Access database
         Student student = studentService.getStudentById(student_id);
-        Account account = accountService.getAccountByID(student.getUser_id());
+        Account account = accountService.getAccountByID(student.getAccount_id());
 
-        // Send information to view
+        // Send data to view
         req.setAttribute("student", student);
         req.setAttribute("account", account);
 
         // Load view
-        DashboardController.loadContentPane("/views/manager/student-edit.jsp", req, resp);
+        forwardResquestTo("/views/manager/student-edit.jsp", req, resp);
     }
 
-    public void handleRequest_EditBack(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("requestType", "view_all");
-        req.setAttribute("allStudents", studentService.getAllStudents());
-        DashboardController.loadContentPane("/views/manager/student.jsp", req, resp);
+    public void handleRequestGet_Edit_Back(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Redirect view
+        responseRedirectTo("/controllers/manager/StudentController", req, resp);
     }
 
-
-    public void handleRequest_EditSave(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // Get data from view
-        Student student2Save = Student.builder()
-                .user_id(Integer.parseInt(req.getParameter("student_id")))
-                .account_id(Integer.parseInt(req.getParameter("account_id")))
-                .first_name(req.getParameter("first-name"))
-                .middle_name(req.getParameter("middle-name"))
-                .last_name(req.getParameter("last-name"))
-                .email(req.getParameter("email"))
-                .phone(req.getParameter("phone"))
-                .build();
-
-        Account account2Save = accountService.getAccountByID(student2Save.getAccount_id());
-
-        // Update database
-        accountService.saveAccount(account2Save);
-        studentService.saveStudent(student2Save);
-
-        // Back to a student list
-        responseRedirectTo("/controllers/manager/StudentController/", req, resp);
-    }
-
-
-    public void handleRequestGet_CreateStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Show create view
-        DashboardController.loadContentPane("/views/manager/student-create.jsp", req, resp);
-    }
-
-
-    public void handleRequestPost_CreateStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void handleRequestPost_Create_Save(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Get data from view
         int account_id = accountService.getMaxAccountID() + 1;
+        System.out.println("account_id to insert = " + account_id);
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        String first_name = req.getParameter("first-name");
-        String middle_name = req.getParameter("middle-name");
-        String last_name = req.getParameter("last-name");
+        String first_name = req.getParameter("first_name");
+        String middle_name = req.getParameter("middle_name");
+        String last_name = req.getParameter("last_name");
         String email = req.getParameter("email");
         String phone = req.getParameter("phone");
 
@@ -194,8 +227,15 @@ public class StudentController extends BaseController {
 
 
         // Check account exists
-        if(accountService.checkAccountExistence(account)){
-            responseRedirectTo("/controllers/manager/StudentController/create", req, resp);
+        String alert, message;
+        if (accountService.checkAccountExistenceByUsername(account)) {
+            System.out.println("Account already exists!");
+            // Show alert
+            alert = "danger";
+            message = "Username already exists!";
+
+            // Load view
+            responseRedirectTo("/controllers/manager/StudentController/create?action=showForm&alert=" + alert + "&message=" + message, req, resp);
             return;
         }
 
@@ -203,16 +243,45 @@ public class StudentController extends BaseController {
         accountService.createAccount(account);
         studentService.createStudent(student);
 
-        // Redirect view
-        responseRedirectTo("/controllers/manager/StudentController/", req, resp);
+        // Show alert
+        alert = "success";
+        message = "Student created successfully!";
+
+        // Load view
+        responseRedirectTo("/controllers/manager/StudentController/create?action=showForm&alert=" + alert + "&message=" + message, req, resp);
     }
 
+    public void handleRequestPost_Edit_Save(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        // Get data from view
+        Student student2Save = Student.builder()
+                .user_id(Integer.parseInt(req.getParameter("student_id")))
+                .account_id(Integer.parseInt(req.getParameter("account_id")))
+                .first_name(req.getParameter("first_name"))
+                .middle_name(req.getParameter("middle_name"))
+                .last_name(req.getParameter("last_name"))
+                .email(req.getParameter("email"))
+                .phone(req.getParameter("phone"))
+                .build();
 
-    public void handleRequestGet_CreateBackStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("requestType", "view_all");
-        req.setAttribute("allStudents", studentService.getAllStudents());
-        DashboardController.loadContentPane("/views/manager/student.jsp", req, resp);
+        Account account2Save = Account.builder()
+                .account_id(Integer.parseInt(req.getParameter("account_id")))
+                .role(req.getParameter("role"))
+                .username(req.getParameter("username"))
+                .password(req.getParameter("password"))
+                .build();
+
+        // Update database
+        accountService.saveAccount(account2Save);
+        studentService.saveStudent(student2Save);
+
+        // Show alert
+        String alert = "success";
+        String message = "Student edited successfully!";
+
+        // Load view
+        responseRedirectTo("/controllers/manager/StudentController/edit?action=showForm&alert=" + alert + "&message=" + message + "&student_id=" + student2Save.getUser_id(), req, resp);
     }
+
 }
 
 

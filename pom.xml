@@ -14,17 +14,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>23</maven.compiler.target>
         <maven.compiler.source>23</maven.compiler.source>
+        <!--        VERSION         -->
+        <servlet-api.version>6.0.0</servlet-api.version>
         <junit.version>5.10.2</junit.version>
         <jdbc.version>8.3.0</jdbc.version>
         <lombok.version>1.18.32</lombok.version>
-        <javafx.version>17.0.6</javafx.version>
+        <jstl-api.version>3.0.2</jstl-api.version>
+        <jstl.version>3.0.1</jstl.version>
+        <sitemesh.version>3.2.1</sitemesh.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>6.0.0</version>
+            <version>${servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -55,14 +59,19 @@
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-            <version>3.0.2</version>
+            <version>${jstl-api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
-            <version>3.0.1</version>
+            <version>${jstl.version}</version>
         </dependency>
-
+        <!-- sitemesh -->
+        <dependency>
+            <groupId>org.sitemesh</groupId>
+            <artifactId>sitemesh</artifactId>
+            <version>${sitemesh.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

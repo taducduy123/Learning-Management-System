@@ -1,18 +1,22 @@
 package com.javaweb.training_center_lms.utils;
 
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegularExpression {
+    // Lấy thông tin từ một file .properties có trong folder main/resources
+    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("regex");
+
+
     // LookAhead:
     // Syntax: X(?=Y)Z
     // Explain:
     // - Entire string is Z
     // - Check if "first" characters of Z are "exactly" same as XY.
-
-    private static final String password_regex = "^(?=(.*)[A-Z]).{6,}$";
-    private static final String email_regex = "^(.*)@gmail\\.com$";
-    private static final String phone_regex = "^[0-9]{9,11}$";
+    private static final String password_regex = resourceBundle.getString("password.regex");
+    private static final String email_regex = resourceBundle.getString("email.regex");;
+    private static final String phone_regex = resourceBundle.getString("phone.regex");;
 
 
     //--------------------------------------------------------------------------------
@@ -42,7 +46,10 @@ public class RegularExpression {
 
 
     public static void main(String[] args) {
-        System.out.println(checkPasswordValidation("D12334"));
+
+        System.out.println(checkPasswordValidation("12334"));
+        System.out.println(checkEmailValidation("1@gmail.com"));
+        System.out.println(checkPhoneValidation("0982587660"));
     }
 }
 

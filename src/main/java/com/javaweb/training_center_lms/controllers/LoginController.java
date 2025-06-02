@@ -23,6 +23,8 @@ public class LoginController extends BaseController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("doGet - LoginController");
+
         String action = req.getParameter("action");
         if(action == null){
             action = "";
@@ -54,7 +56,7 @@ public class LoginController extends BaseController {
 
         // Authenticate user
         Account account = accountService.getAccountByRole_Username_Password(role, username, password);
-        if (!accountService.checkAccountExistence(account)) {
+        if (!accountService.checkAccountExistenceByRole_Username_Password(account)) {
             System.out.println("call");
             //Show alert
             resp.setContentType("application/json");
@@ -123,12 +125,6 @@ public class LoginController extends BaseController {
         out.close();
     }
 
-
-    public void setUserSession(Account account, HttpServletRequest req, HttpServletResponse resp) {
-        sessionUtil.putValue("role", account.getRole(), req);
-        sessionUtil.putValue("username", account.getUsername(), req);
-        sessionUtil.putValue("password", account.getPassword(), req);
-    }
 
 
 }

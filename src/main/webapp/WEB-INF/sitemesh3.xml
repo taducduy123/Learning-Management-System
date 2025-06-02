@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<sitemesh>
+    <mapping path="/controllers/manager*" name="admin" decorator="admin.jsp"/>
+    <mapping path="/controllers/instructor*" name="instructor" decorator="instructor.jsp"/>
+    <mapping path="/controllers/student*" name="student" decorator="student.jsp"/>
+    <mapping path="/api*" name="api" exclude="true"/>
+</sitemesh>
