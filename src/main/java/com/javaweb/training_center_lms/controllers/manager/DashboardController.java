@@ -5,7 +5,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 
@@ -24,10 +23,8 @@ public class DashboardController extends BaseController {
         switch (uri) {
             case "":
                 forwardResquestTo("/views/manager/home.jsp", req, resp);
-//                responseRedirectTo("/views/manager/home.jsp", req, resp);
                 break;
             case "/student-option":
-//                forwardResquestTo("/controllers/manager/StudentController", req, resp);
                 responseRedirectTo("/controllers/manager/StudentController", req, resp);
                 break;
             case "/instructor-option":
@@ -40,8 +37,6 @@ public class DashboardController extends BaseController {
                 break;
 
         }
-
-
     }
 
 }

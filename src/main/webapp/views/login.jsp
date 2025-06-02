@@ -84,10 +84,13 @@
                     if (data.login_status === "fail") {
                         swal("Account does not exist", "", "error");
                     }
-                    if (data.login_status === "success") {
+                    else if (data.login_status === "success") {
                         swal("Login successful!", "", "success").then(function() {
                             window.location.href = data.user_dashboard_url;
                         })
+                    }
+                    else if (data.login_status === "blocked") {
+                        swal("Your account is blocked", "Please contact admin to resolve the problem!", "warning");
                     }
                 },
                 error: function (e) {

@@ -1,16 +1,24 @@
 package com.javaweb.training_center_lms.service.Impl;
 
 import com.javaweb.training_center_lms.models.Account;
+import com.javaweb.training_center_lms.models.Instructor;
+import com.javaweb.training_center_lms.models.Student;
 import com.javaweb.training_center_lms.repository.IAccountRepo;
+import com.javaweb.training_center_lms.repository.IInstructorRepo;
+import com.javaweb.training_center_lms.repository.IStudentRepo;
 import com.javaweb.training_center_lms.repository.Impl.AccountRepo;
+import com.javaweb.training_center_lms.repository.Impl.InstructorRepo;
+import com.javaweb.training_center_lms.repository.Impl.StudentRepo;
 import com.javaweb.training_center_lms.service.IAccountService;
 
 public class AccountService implements IAccountService {
     private final IAccountRepo accountRepo = new AccountRepo();
+    private final IStudentRepo studentRepo = new StudentRepo();
+    private final IInstructorRepo instructorRepo = new InstructorRepo();
 
     @Override
     public boolean checkAccountExistenceByRole_Username_Password(Account account) {
-        if(account == null) {
+        if (account == null) {
             return false;
         }
         return accountRepo.getAccountByRole_Username_Password(account.getRole(), account.getUsername(), account.getPassword()) != null;
@@ -23,7 +31,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public void saveAccount(Account account) {
-        if(!checkAccountExistenceByUsername(account)) {
+        if (!checkAccountExistenceByUsername(account)) {
             return;
         }
         accountRepo.saveAccount(account);
@@ -36,7 +44,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public void createAccount(Account account) {
-        if(checkAccountExistenceByRole_Username_Password(account)) {
+        if (checkAccountExistenceByRole_Username_Password(account)) {
             return;
         }
         accountRepo.createAccount(account);
@@ -55,5 +63,27 @@ public class AccountService implements IAccountService {
     @Override
     public boolean checkAccountExistenceByUsername(Account account) {
         return accountRepo.getAccountByUsername(account.getUsername()) != null;
+    }
+
+
+    @Override
+    public boolean checkAccountBlocked(Account account) {
+        if (account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
+        }
+        boolean isBlocked = false;
+        switch (account.getRole().toLowerCase()) {
+            case "instructor":
+                Instructor instructor = instructorRepo.getInstructorByAccountID(account.getAccount_id());
+                isBlocked = instructor.isBlocked();
+                break;
+            case "student":
+                Student student = studentRepo.getStudentByAccountID(account.getAccount_id());
+                isBlocked = student.isBlocked();
+                break;
+            default:
+                break;
+        }
+        return isBlocked;
     }
 }

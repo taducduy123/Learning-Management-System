@@ -1,5 +1,6 @@
 package com.javaweb.training_center_lms.repository.Impl;
 
+import com.javaweb.training_center_lms.models.Instructor;
 import com.javaweb.training_center_lms.models.Student;
 import com.javaweb.training_center_lms.repository.IStudentRepo;
 import com.javaweb.training_center_lms.utils.DBConnect;
@@ -377,9 +378,40 @@ public class StudentRepo implements IStudentRepo {
         }
     }
 
-    public static void main(String[] args) {
-        StudentRepo studentRepo = new StudentRepo();
-        studentRepo.unblockStudentBy_ID(1);
 
+    @Override
+    public Student getStudentByAccountID(int accountID) {
+        Student student = null;
+
+        try {
+            dbConnect.openConnection();
+
+            String sql = """
+                        select *
+                        from student 
+                        where account_id = ?;
+                    """;
+
+            ResultSet rs = dbConnect.executeReturnQuery(sql, accountID);
+
+            while (rs.next()) {
+                student = Student.builder()
+                        .user_id(rs.getInt("student_id"))
+                        .account_id(rs.getInt("account_id"))
+                        .first_name(rs.getString("first_name"))
+                        .middle_name(rs.getString("middle_name"))
+                        .last_name(rs.getString("last_name"))
+                        .email(rs.getString("email"))
+                        .phone(rs.getString("phone"))
+                        .isBlocked(rs.getBoolean("isBlocked"))
+                        .build();
+            }
+
+            dbConnect.closeResources();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return student;
     }
 }

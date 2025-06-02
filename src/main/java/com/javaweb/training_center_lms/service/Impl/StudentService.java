@@ -32,12 +32,10 @@ public class StudentService implements IStudentService {
         studentRepo.unblockStudentBy_ID(id);
     }
 
-
     @Override
     public Student getStudentById(int id) {
         return studentRepo.getStudentById(id);
     }
-
 
     @Override
     public void saveStudent(Student student) {
@@ -49,11 +47,8 @@ public class StudentService implements IStudentService {
         studentRepo.create(student);
     }
 
-    public static void main(String[] args) {
-        StudentService studentService = new StudentService();
-        System.out.println(studentService.getStudentsByName("Duy"));
+    @Override
+    public Student getStudentByAccountID(int account_id) {
+        return studentRepo.getStudentByAccountID(account_id);
     }
-
-
-
 }

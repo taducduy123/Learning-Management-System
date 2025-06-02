@@ -1,10 +1,12 @@
 package com.javaweb.training_center_lms.repository;
 
+import com.javaweb.training_center_lms.models.Instructor;
 import com.javaweb.training_center_lms.models.Student;
 
 import java.util.List;
 
 public interface IStudentRepo {
+    Student getStudentByAccountID(int accountID);
     Student getStudentBy_UsernameAndPassword(String username, String password);
     List<Student> getAllStudents();
     List<Student> getStudentsBy_Name(String name);

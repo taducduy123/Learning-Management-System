@@ -7,6 +7,7 @@ public interface IAccountService {
     Account getAccountByRole_Username_Password(String role, String username, String password);
     boolean checkAccountExistenceByRole_Username_Password(Account account);
     boolean checkAccountExistenceByUsername(Account account);
+    boolean checkAccountBlocked(Account account);
     Account getAccountByID(int accountID);
     void saveAccount(Account account);
     int getMaxAccountID();

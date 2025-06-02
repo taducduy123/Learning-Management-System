@@ -70,42 +70,5 @@
         showArea: true
     });
 </script>
-<%-- ALERT --%>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-
-    $(document).ready(function () {
-        $('#button').click(function (event) {
-            var role = $('#select').val();
-            var username = $('#username').val();
-            var password = $('#password').val();
-
-            $.ajax({
-                type: 'POST',
-                url: '/controllers/LoginController',
-                data: {
-                    role: role,
-                    username: username,
-                    password: password
-                },
-                success: function (data) {
-                    if (data.login_status === "fail") {
-                        swal("Account does not exist", "", "error");
-                    }
-                    if (data.login_status === "success") {
-                        swal("Login successful!", "", "success").then(function() {
-                            window.location.href = data.user_dashboard_url;
-                        })
-                    }
-                },
-                error: function (e) {
-                    swal("Error!", "AJAX EXCEPTION", "error");
-                }
-            });
-        });
-    });
-
-</script>
 </body>
 </html>
