@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,19 +8,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/forgot-password.css">
 
     <title>Document</title>
 </head>
 <body>
-<div class="card col-10 h-100 d-flex flex-row justify-content-center m-auto">
-    <div class="w-50">
-        <img class="w-100 h-100" src="${pageContext.request.contextPath}/resources/images/canvas-LMS.png"
-             alt="canvas-LMS.png">
-    </div>
-    <div class="w-50 m-3">
-        <h1 class="text-center fw-bold">LOGIN</h1>
-        <form>
+
+<fmt:bundle basename="regex">
+    <fmt:message key="email.regex" var="emailPattern"/>
+</fmt:bundle>
+
+
+<div class="card m-auto col-6 p-3">
+    <div class="">
+        <h1 class="text-center fw-bold">Reset Password</h1>
+        <div class="text-center">Please provide the following fields to retake your password</div>
+        <hr>
+        <form id="form">
             <div class="mb-4">
                 <label for="select" class="form-label fw-bold">Select role</label>
                 <select class="form-select" id="select" name="role">
@@ -33,25 +38,14 @@
                 <input type="text" class="form-control" id="username" name="username" required>
             </div>
             <div class="mb-4">
-                <label for="password" class="form-label fw-bold">Password</label>
-                <a class="float-end" href="${pageContext.request.contextPath}/controllers/ForgotPasswordController">forgot password?</a>
-                <input type="password" class="form-control" id="password" name="password" required>
+                <label for="email" class="form-label fw-bold">Email</label>
+                <input type="email" class="form-control" id="email" name="email" pattern="${emailPattern}" required>
+                <div class="form-text">Email must end with @gmail.com</div>
             </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="remember_id">
-                <label class="form-check-label" for="remember_id">STAY SIGNED IN</label>
-            </div>
-            <input type="hidden" name="action" value="login">
-            <button type="button" class="btn btn-primary d-block mx-auto w-50" id="button">Login</button>
+            <button type="submit" class="btn btn-success d-block mx-auto w-50" id="button">Reset Password</button>
         </form>
-        <hr>
-        <div class="text-center">
-            Don't have an account? <a href="">Register New Account</a>
-        </div>
-
     </div>
 </div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
@@ -63,33 +57,38 @@
 <script>
 
     $(document).ready(function () {
-        $('#button').click(function (event) {
-            var role = $('#select').val();
+        $('#form').on('submit', function (event) {
+            event.preventDefault(); // Ngăn form submit mặc định
+
             var username = $('#username').val();
-            var password = $('#password').val();
+            var email = $('#email').val();
+            var role = $('#select').val();
 
             $.ajax({
                 type: 'POST',
-                url: '/controllers/LoginController',
+                url: '/controllers/ForgotPasswordController',
                 data: {
                     role: role,
                     username: username,
-                    password: password
+                    email: email
                 },
                 success: function (data) {
                     if (data.login_status === "fail") {
-                        swal("Account does not exist", "", "error");
-                    }
-                    else if (data.login_status === "success") {
-                        swal("Login successful!", "", "success").then(function() {
-                            window.location.href = data.user_dashboard_url;
+                        swal("Fail", "", "error");
+                        if (data.errorType === "role_username") {
+                            swal("Fail", "your account does not exist!", "error");
+                        } else if (data.errorType === "username_email") {
+                            swal("Fail", "username and email do not match!", "error");
+                        }
+                    } else if (data.login_status === "success") {
+                        swal("Success", "", "success");
+                        swal("Success", "New password has been sent to your email. Please check it!", "success").then(function () {
+                            window.location.href = data.redirect_url;
                         })
-                    }
-                    else if (data.login_status === "blocked") {
-                        swal("Your account is blocked", "Please contact admin to resolve the problem!", "warning");
                     }
                 },
                 error: function (e) {
+                    console.log(e)
                     swal("Error!", "AJAX EXCEPTION", "error");
                 }
             });

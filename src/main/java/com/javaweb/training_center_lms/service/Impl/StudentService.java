@@ -9,7 +9,7 @@ import java.util.List;
 
 public class StudentService implements IStudentService {
 
-    private final IStudentRepo studentRepo = new StudentRepo();
+    private static final IStudentRepo studentRepo = new StudentRepo();
 
     @Override
     public List<Student> getAllStudents() {

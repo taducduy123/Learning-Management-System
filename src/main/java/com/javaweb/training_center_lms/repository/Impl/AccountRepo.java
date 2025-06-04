@@ -234,4 +234,132 @@ public class AccountRepo implements IAccountRepo {
 
         return account;
     }
+
+
+    @Override
+    public Account getManagerAccountByUsername_Email(String username, String email) {
+        Account account = null;
+
+        try {
+            dbConnect.openConnection();
+
+            String sql = """
+                        select account.*
+                        from account
+                        join manager
+                        on manager.account_id = account.account_id
+                        where (username, email) = (?, ?);
+                    """;
+
+            ResultSet rs = dbConnect.executeReturnQuery(sql, username, email);
+
+
+            while (rs.next()) {
+                account = Account.builder()
+                        .account_id(rs.getInt("account_id"))
+                        .role(rs.getString("role"))
+                        .username(rs.getString("username"))
+                        .password(rs.getString("password"))
+                        .build();
+            }
+
+            dbConnect.closeResources();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return account;
+    }
+
+
+    @Override
+    public Account getInstructorAccountByUsername_Email(String username, String email) {
+        Account account = null;
+
+        try {
+            dbConnect.openConnection();
+
+            String sql = """
+                        select account.*
+                        from account
+                        join instructor
+                        on instructor.account_id = account.account_id
+                        where (username, email) = (?, ?);
+                    """;
+
+            ResultSet rs = dbConnect.executeReturnQuery(sql, username, email);
+
+
+            while (rs.next()) {
+                account = Account.builder()
+                        .account_id(rs.getInt("account_id"))
+                        .role(rs.getString("role"))
+                        .username(rs.getString("username"))
+                        .password(rs.getString("password"))
+                        .build();
+            }
+
+            dbConnect.closeResources();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return account;
+    }
+
+
+    @Override
+    public Account getStudentAccountByUsername_Email(String username, String email) {
+        Account account = null;
+
+        try {
+            dbConnect.openConnection();
+
+            String sql = """
+                        select account.*
+                        from account
+                        join student
+                        on student.account_id = account.account_id
+                        where (username, email) = (?, ?);
+                    """;
+
+            ResultSet rs = dbConnect.executeReturnQuery(sql, username, email);
+
+
+            while (rs.next()) {
+                account = Account.builder()
+                        .account_id(rs.getInt("account_id"))
+                        .role(rs.getString("role"))
+                        .username(rs.getString("username"))
+                        .password(rs.getString("password"))
+                        .build();
+            }
+
+            dbConnect.closeResources();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return account;
+    }
+
+
+    @Override
+    public void resetPassword(Account account, String newPassword) {
+        try {
+            dbConnect.openConnection();
+
+            String sql = """
+                    update account
+                    set password = ?
+                    where username = ?;
+                    """;
+
+            dbConnect.executeVoidQuery(sql, newPassword, account.getUsername());
+
+            dbConnect.closeResources();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

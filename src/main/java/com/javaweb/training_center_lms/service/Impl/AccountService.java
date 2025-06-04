@@ -10,11 +10,15 @@ import com.javaweb.training_center_lms.repository.Impl.AccountRepo;
 import com.javaweb.training_center_lms.repository.Impl.InstructorRepo;
 import com.javaweb.training_center_lms.repository.Impl.StudentRepo;
 import com.javaweb.training_center_lms.service.IAccountService;
+import com.javaweb.training_center_lms.utils.EmailUtil;
+import com.javaweb.training_center_lms.utils.RandomGeneratorUtil;
 
 public class AccountService implements IAccountService {
-    private final IAccountRepo accountRepo = new AccountRepo();
-    private final IStudentRepo studentRepo = new StudentRepo();
-    private final IInstructorRepo instructorRepo = new InstructorRepo();
+    private static final IAccountRepo accountRepo = new AccountRepo();
+    private static final IStudentRepo studentRepo = new StudentRepo();
+    private static final IInstructorRepo instructorRepo = new InstructorRepo();
+    private static final RandomGeneratorUtil randomGeneratorUtil = RandomGeneratorUtil.getInstance();
+    private static final EmailUtil emailUtil = new EmailUtil();
 
     @Override
     public boolean checkAccountExistenceByRole_Username_Password(Account account) {
@@ -85,5 +89,46 @@ public class AccountService implements IAccountService {
                 break;
         }
         return isBlocked;
+    }
+
+    @Override
+    public boolean checkAccountExistenceByRole_Username_Email(Account account, String email) {
+        if (account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
+        }
+
+        return switch (account.getRole().toLowerCase()) {
+            case "manager" -> accountRepo.getManagerAccountByUsername_Email(account.getUsername(), email) != null;
+            case "instructor" -> accountRepo.getInstructorAccountByUsername_Email(account.getUsername(), email) != null;
+            case "student" -> accountRepo.getStudentAccountByUsername_Email(account.getUsername(), email) != null;
+            default -> false;
+        };
+    }
+
+    @Override
+    public void resetPassword(Account account, String user_email) {
+        if (account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
+        }
+        // Check if the account exists in the system
+        if (!checkAccountExistenceByUsername(account)) {
+            throw new IllegalArgumentException("Account does not exist");
+        }
+
+        // Update password in database
+        String newPassword = randomGeneratorUtil.generateValidPassword();
+        accountRepo.resetPassword(account, newPassword);
+
+        // Send new password to user's email
+        String subject = "Reset Password";
+        String message = String.format("<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<body>\n" +
+                "    This is new password: <b>%s</b>\n" +
+                "<br>\n" +
+                "    <a href=\"http://localhost:8080/controllers/LoginController\">Click here to login the system</a>\n" +
+                "</body>\n" +
+                "</html>", newPassword);
+        emailUtil.hostSendMailToUser(user_email, subject, message);
     }
 }

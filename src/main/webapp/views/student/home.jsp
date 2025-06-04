@@ -4,6 +4,6 @@
     <title>Student Home</title>
 </head>
 <body>
-<h1>Hello Student, This is Your Home</h1>
+<h1>Welcome student to Home</h1>
 </body>
 </html>

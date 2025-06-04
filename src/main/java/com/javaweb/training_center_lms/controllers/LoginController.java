@@ -1,7 +1,6 @@
 package com.javaweb.training_center_lms.controllers;
 
 import com.javaweb.training_center_lms.models.Account;
-import com.javaweb.training_center_lms.models.Instructor;
 import com.javaweb.training_center_lms.service.IAccountService;
 import com.javaweb.training_center_lms.service.IInstructorService;
 import com.javaweb.training_center_lms.service.IManagerService;
@@ -15,6 +14,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -30,6 +30,7 @@ public class LoginController extends BaseController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("LoginController");
         String action = req.getParameter("action");
         if(action == null){
             action = "";
@@ -44,6 +45,7 @@ public class LoginController extends BaseController {
                 responseRedirectTo("/controllers/LoginController/logout?action=login", req, resp);
                 break;
             default:
+                forwardResquestTo("/views/login.jsp", req, resp);
                 break;
         }
     }
@@ -52,9 +54,9 @@ public class LoginController extends BaseController {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Get data from view
-        String role = req.getParameter("role");
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        String role = req.getParameter("role").trim();
+        String username = req.getParameter("username").trim();
+        String password = req.getParameter("password").trim();
         Account account = accountService.getAccountByRole_Username_Password(role, username, password);
 
         // Authenticate user

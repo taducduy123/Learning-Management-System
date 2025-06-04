@@ -4,6 +4,6 @@
     <title>Instructor Home</title>
 </head>
 <body>
-<h1>Hello Instructor, This is Your Home</h1>
+<h1>Welcome instructor to Home</h1>
 </body>
 </html>

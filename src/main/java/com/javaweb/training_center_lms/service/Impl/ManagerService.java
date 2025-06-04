@@ -6,7 +6,7 @@ import com.javaweb.training_center_lms.repository.Impl.ManagerRepo;
 import com.javaweb.training_center_lms.service.IManagerService;
 
 public class ManagerService implements IManagerService {
-    private final IManagerRepo managerRepo = new ManagerRepo();
+    private static final IManagerRepo managerRepo = new ManagerRepo();
 
 
     @Override
