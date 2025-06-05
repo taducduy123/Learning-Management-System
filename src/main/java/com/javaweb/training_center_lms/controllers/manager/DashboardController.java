@@ -5,38 +5,25 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
+import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/controllers/manager/DashboardController/*"})
 public class DashboardController extends BaseController {
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getPathInfo();
-        System.out.println(uri);
-        if(uri == null){
+        if (uri == null) {
             uri = "";
         }
 
         switch (uri) {
             case "":
-                forwardResquestTo("/views/manager/home.jsp", req, resp);
-                break;
-            case "/student-option":
-                responseRedirectTo("/controllers/manager/StudentController", req, resp);
-                break;
-            case "/instructor-option":
-                responseRedirectTo("/controllers/manager/InstructorController", req, resp);
-                break;
-            case "/course-option":
-                responseRedirectTo("/controllers/manager/CourseController", req, resp);
+                forwardResquestTo("/views/manager/dashboard.jsp", req, resp);
                 break;
             default:
                 break;
-
         }
     }
-
 }

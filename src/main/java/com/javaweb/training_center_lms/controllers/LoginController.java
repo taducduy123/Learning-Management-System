@@ -9,6 +9,7 @@ import com.javaweb.training_center_lms.service.Impl.AccountService;
 import com.javaweb.training_center_lms.service.Impl.InstructorService;
 import com.javaweb.training_center_lms.service.Impl.ManagerService;
 import com.javaweb.training_center_lms.service.Impl.StudentService;
+import com.javaweb.training_center_lms.utils.CookieUtil;
 import com.javaweb.training_center_lms.utils.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,11 +23,16 @@ import java.io.PrintWriter;
 @WebServlet(urlPatterns = {"/controllers/LoginController/*"})
 public class LoginController extends BaseController {
 
+    private final int remember_expire = 60;
+
     private final IAccountService accountService = new AccountService();
     private final IManagerService managerService = new ManagerService();
     private final IInstructorService instructorService = new InstructorService();
     private final IStudentService studentService = new StudentService();
     private final SessionUtil sessionUtil = SessionUtil.getInstance();
+    private final CookieUtil cookieUtil = CookieUtil.getInstance();
+
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,6 +43,12 @@ public class LoginController extends BaseController {
         }
         switch (action) {
             case "login":
+                String role_C = cookieUtil.getValue("role_C", req);
+                String username_C = cookieUtil.getValue("username_C", req);
+                String password_C = cookieUtil.getValue("password_C", req);
+                req.setAttribute("role_C", role_C);
+                req.setAttribute("username_C", username_C);
+                req.setAttribute("password_C", password_C);
                 forwardResquestTo("/views/login.jsp", req, resp);
                 break;
             case "logout":
@@ -92,6 +104,7 @@ public class LoginController extends BaseController {
             return;
         }
 
+        // Set session
         sessionUtil.putValue("account", account, req);
         switch (account.getRole().toLowerCase()) {
             case "manager":
@@ -107,6 +120,14 @@ public class LoginController extends BaseController {
                 break;
         }
 
+        // Set cookie
+        String remember = req.getParameter("remember");
+        if(remember != null && remember.equals("on")){
+            cookieUtil.putValue("role_C", role, remember_expire, resp);
+            cookieUtil.putValue("username_C", username, remember_expire, resp);
+            cookieUtil.putValue("password_C", password, remember_expire, resp);
+        }
+
 
         // Authorize user
         redirectUser(account, req, resp);
@@ -117,9 +138,9 @@ public class LoginController extends BaseController {
         String url = null;
         String role = account.getRole();
         url = switch (role.toLowerCase()) {
-            case "student" -> "/controllers/student/DashboardController";
-            case "instructor" -> "/controllers/instructor/DashboardController";
-            case "manager" -> "/controllers/manager/DashboardController";
+            case "student" -> "/controllers/student/HomeController";
+            case "instructor" -> "/controllers/instructor/HomeController";
+            case "manager" -> "/controllers/manager/HomeController";
             default -> url;
         };
 

@@ -2,7 +2,7 @@
     <div class="position-sticky">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/controllers/manager">
+                <a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/controllers/instructor/HomeController?option=dashboard">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                          stroke-linejoin="round" class="feather feather-home">
@@ -14,7 +14,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link active"
-                   href="${pageContext.request.contextPath}/controllers/manager/StudentController">
+                   href="${pageContext.request.contextPath}/controllers/instructor/HomeController?option=student">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                          stroke-linejoin="round" class="feather feather-file">
@@ -26,7 +26,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link"
-                   href="${pageContext.request.contextPath}//controllers/manager/CourseController">
+                   href="${pageContext.request.contextPath}/controllers/instructor/HomeController?option=course">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                          stroke-linejoin="round" class="feather feather-users">

@@ -12,6 +12,10 @@
     <title>Document</title>
 </head>
 <body>
+<c:set var="role_C" value="${requestScope['role_C']}"/>
+<c:set var="username_C" value="${requestScope['username_C']}"/>
+<c:set var="password_C" value="${requestScope['password_C']}"/>
+
 <div class="card col-10 h-100 d-flex flex-row justify-content-center m-auto">
     <div class="w-50">
         <img class="w-100 h-100" src="${pageContext.request.contextPath}/resources/images/canvas-LMS.png"
@@ -19,30 +23,30 @@
     </div>
     <div class="w-50 m-3">
         <h1 class="text-center fw-bold">LOGIN</h1>
-        <form>
+        <form id="form">
             <div class="mb-4">
                 <label for="select" class="form-label fw-bold">Select role</label>
                 <select class="form-select" id="select" name="role">
                     <option value="Student" selected>Student</option>
-                    <option value="Instructor">Instructor</option>
-                    <option value="Manager">Manager</option>
+                    <option value="Instructor" ${role_C == 'Instructor' ? 'selected' : ''}>Instructor</option>
+                    <option value="Manager" ${role_C == 'Manager' ? 'selected' : ''}>Manager</option>
                 </select>
             </div>
             <div class="mb-4">
                 <label for="username" class="form-label fw-bold">Username</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+                <input type="text" class="form-control" id="username" name="username" value="${username_C}" required>
             </div>
             <div class="mb-4">
                 <label for="password" class="form-label fw-bold">Password</label>
                 <a class="float-end" href="${pageContext.request.contextPath}/controllers/ForgotPasswordController">forgot password?</a>
-                <input type="password" class="form-control" id="password" name="password" required>
+                <input type="password" class="form-control" id="password" name="password" value="${password_C}" required>
             </div>
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="remember_id">
-                <label class="form-check-label" for="remember_id">STAY SIGNED IN</label>
+                <label class="form-check-label" for="remember_id">Remember me for 60 seconds</label>
             </div>
             <input type="hidden" name="action" value="login">
-            <button type="button" class="btn btn-primary d-block mx-auto w-50" id="button">Login</button>
+            <button type="submit" class="btn btn-primary d-block mx-auto w-50" id="button">Login</button>
         </form>
         <hr>
         <div class="text-center">
@@ -63,10 +67,13 @@
 <script>
 
     $(document).ready(function () {
-        $('#button').click(function (event) {
+        $('#form').on('submit', function (event) {
+            event.preventDefault(); // Ngăn form submit mặc định
+
             var role = $('#select').val();
             var username = $('#username').val();
             var password = $('#password').val();
+            var remember = $('#remember_id').val();
 
             $.ajax({
                 type: 'POST',
@@ -74,7 +81,8 @@
                 data: {
                     role: role,
                     username: username,
-                    password: password
+                    password: password,
+                    remember: remember
                 },
                 success: function (data) {
                     if (data.login_status === "fail") {

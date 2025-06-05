@@ -14,13 +14,13 @@ public class DashboardController extends BaseController {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getPathInfo();
-        if(uri == null){
+        if (uri == null) {
             uri = "";
         }
 
         switch (uri) {
             case "":
-                forwardResquestTo("/views/instructor/home.jsp", req, resp);
+                forwardResquestTo("/views/instructor/dashboard.jsp", req, resp);
                 break;
             default:
                 break;

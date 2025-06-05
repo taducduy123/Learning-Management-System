@@ -8,7 +8,8 @@
 
 
 <%--SEARCH--%>
-<form class="container w-50 mb-3" action="${pageContext.request.contextPath}/controllers/manager/StudentController/search" method="get">
+<form class="container w-50 mb-3"
+      action="${pageContext.request.contextPath}/controllers/manager/StudentController/search" method="get">
     <div class="d-flex flex-row justify-content-center">
         <input type="text" class="form-control search-input" placeholder="Search by name" name="keyword">
         <button type="submit" class="btn btn-primary me-1">
@@ -29,32 +30,44 @@
             <th class="bg-dark text-light">Email</th>
             <th class="bg-dark text-light">Is Block?</th>
             <th class="bg-dark text-light">Actions</th>
-
         </tr>
         </thead>
         <tbody>
 
-        <c:forEach items="${students}" var="student">
+        <c:if test="${empty students}">
             <tr>
-                <td><c:out value="${student.getUser_id()}"/></td>
-                <td><c:out value="${student.getAccount_id()}"/></td>
-                <td><c:out value="${student.getFirst_name()} ${student.getMiddle_name()} ${student.getLast_name()}"/></td>
-                <td><c:out value="${student.getPhone()}"/></td>
-                <td><c:out value="${student.getEmail()}"/></td>
-                <td><c:out value="${student.isBlocked()}"/></td>
-                <td>
-                    <a href="${pageContext.request.contextPath}/controllers/manager/StudentController/edit?student_id=${student.getUser_id()}&action=showForm">
-                        <button type="button" class="btn btn-info">Edit</button>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/controllers/manager/StudentController/block?student_id=${student.getUser_id()}">
-                        <button id="blockBtn" class="btn ${student.isBlocked() ? 'btn-secondary' : 'btn-danger'}">Block</button>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/controllers/manager/StudentController/un-block?student_id=${student.getUser_id()}">
-                        <button id="blockBtn" class="btn ${student.isBlocked() ? 'btn-success' : 'btn-secondary'}">Unblock</button>
-                    </a>
-                </td>
+                <td colspan="7" class="text-center">No Result Found</td>
             </tr>
-        </c:forEach>
+        </c:if>
+
+        <c:if test="${not empty students}">
+            <c:forEach items="${students}" var="student">
+                <tr>
+                    <td><c:out value="${student.getUser_id()}"/></td>
+                    <td><c:out value="${student.getAccount_id()}"/></td>
+                    <td><c:out
+                            value="${student.getFirst_name()} ${student.getMiddle_name()} ${student.getLast_name()}"/></td>
+                    <td><c:out value="${student.getPhone()}"/></td>
+                    <td><c:out value="${student.getEmail()}"/></td>
+                    <td><c:out value="${student.isBlocked()}"/></td>
+                    <td>
+                        <a href="${pageContext.request.contextPath}/controllers/manager/StudentController/edit?student_id=${student.getUser_id()}&action=showForm">
+                            <button type="button" class="btn btn-info">Edit</button>
+                        </a>
+                        <a href="${pageContext.request.contextPath}/controllers/manager/StudentController/block?student_id=${student.getUser_id()}">
+                            <button id="blockBtn" class="btn ${student.isBlocked() ? 'btn-secondary' : 'btn-danger'}">
+                                Block
+                            </button>
+                        </a>
+                        <a href="${pageContext.request.contextPath}/controllers/manager/StudentController/un-block?student_id=${student.getUser_id()}">
+                            <button id="blockBtn" class="btn ${student.isBlocked() ? 'btn-success' : 'btn-secondary'}">
+                                Unblock
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            </c:forEach>
+        </c:if>
         </tbody>
     </table>
 </div>

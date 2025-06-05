@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class SessionUtil {
     private static SessionUtil instance;
 
+    //--------------------------------------------------------------------
     private SessionUtil() {
 
     }
