@@ -13,4 +13,5 @@ public interface IStudentService {
     void unblockStudentBy_ID(int id);
     void saveStudent(Student student);
     void createStudent(Student student);
+    void editProfile(Student student);
 }

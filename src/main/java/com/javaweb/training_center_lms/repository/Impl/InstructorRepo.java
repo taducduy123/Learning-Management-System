@@ -48,4 +48,37 @@ public class InstructorRepo implements IInstructorRepo {
 
         return instructor;
     }
+
+    @Override
+    public void edit(Instructor instructor) {
+        if (instructor == null) {
+            throw new IllegalArgumentException("Instructor cannot be null");
+        }
+
+        try {
+            dbConnect.openConnection();
+
+            String sql = """
+                    update instructor
+                    set first_name = ?,
+                        middle_name = ?,
+                        last_name = ?,
+                        email = ?,
+                        phone = ?
+                    where instructor_id = ?;
+                    """;
+
+            dbConnect.executeVoidQuery(sql,
+                    instructor.getFirst_name(),
+                    instructor.getMiddle_name(),
+                    instructor.getLast_name(),
+                    instructor.getEmail(),
+                    instructor.getPhone(),
+                    instructor.getUser_id());
+
+            dbConnect.closeResources();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

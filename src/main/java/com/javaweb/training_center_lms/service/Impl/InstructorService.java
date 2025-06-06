@@ -12,4 +12,9 @@ public class InstructorService implements IInstructorService {
     public Instructor getInstructorByAccountID(int account_id) {
         return instructorRepo.getInstructorByAccountID(account_id);
     }
+
+    @Override
+    public void editProfile(Instructor instructor) {
+        instructorRepo.edit(instructor);
+    }
 }

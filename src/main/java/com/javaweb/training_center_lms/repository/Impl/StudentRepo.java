@@ -414,4 +414,37 @@ public class StudentRepo implements IStudentRepo {
 
         return student;
     }
+
+    @Override
+    public void edit(Student student) {
+        if (student == null) {
+            throw new IllegalArgumentException("Student cannot be null");
+        }
+
+        try {
+            dbConnect.openConnection();
+
+            String sql = """
+                    update student
+                    set first_name = ?,
+                        middle_name = ?,
+                        last_name = ?,
+                        email = ?,
+                        phone = ?
+                    where student_id = ?;
+                    """;
+
+            dbConnect.executeVoidQuery(sql,
+                    student.getFirst_name(),
+                    student.getMiddle_name(),
+                    student.getLast_name(),
+                    student.getEmail(),
+                    student.getPhone(),
+                    student.getUser_id());
+
+            dbConnect.closeResources();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

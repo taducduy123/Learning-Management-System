@@ -18,7 +18,7 @@
                 Hello, ${sessionScope.user.last_name == null ? 'anonymous' : sessionScope.user.last_name}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/controllers/ProfileController" target="_blank">Edit Profile</a></li>
                 <li><a class="dropdown-item" href="#">Secure Account</a></li>
                 <li><a class="dropdown-item"
                        href="${pageContext.request.contextPath}/controllers/ChangePasswordController" target="_blank">Change

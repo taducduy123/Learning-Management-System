@@ -15,4 +15,5 @@ public interface IStudentRepo {
     int unblockStudentBy_ID(int id);
     void save(Student student);
     void create(Student student);
+    void edit(Student student);
 }

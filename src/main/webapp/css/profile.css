@@ -1,0 +1,64 @@
+body {
+    background: linear-gradient(135deg, #c3ecf8 0%, #a9def9 100%);
+    font-family: 'Segoe UI', sans-serif;
+    padding-top: 50px;
+}
+
+.profile-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 700px;
+    margin: auto;
+}
+
+.form-title {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #0d6efd;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    border-color: #0d6efd;
+}
+
+.btn-custom {
+    padding: 10px 25px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.btn-save {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+}
+
+.btn-save:hover {
+    background-color: #0b5ed7;
+}
+
+.btn-clear {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+.btn-clear:hover {
+    background-color: #5c636a;
+}
+
+@media (max-width: 576px) {
+    .btn-custom {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+

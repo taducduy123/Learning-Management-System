@@ -377,6 +377,8 @@ public class AccountRepo implements IAccountRepo {
                     """;
 
             dbConnect.executeVoidQuery(sql, newPassword, account.getUsername());
+
+            dbConnect.closeResources();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

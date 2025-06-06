@@ -23,4 +23,9 @@ public class ManagerService implements IManagerService {
     public Manager getManagerByAccountID(int account_id) {
         return managerRepo.getManagerByAccountID(account_id);
     }
+
+    @Override
+    public void editProfile(Manager manager) {
+        managerRepo.edit(manager);
+    }
 }

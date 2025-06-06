@@ -9,6 +9,7 @@
     <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/change-password.css" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/alert-animation.css">
 </head>
 <body>
 
@@ -29,7 +30,7 @@
                     <c:set var="message" value="${requestScope['message']}"/>
 
                     <c:if test="${alert != null}">
-                        <div class="alert alert-${alert}">
+                        <div class="alert alert-${alert} alert-slide-in">
                             <fmt:bundle basename="message">
                                 <fmt:message key="${message}"/>
                             </fmt:bundle>

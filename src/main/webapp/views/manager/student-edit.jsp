@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/alert-animation.css">
+
 
 <title>Edit Student</title>
 
@@ -18,7 +20,7 @@
   <c:set var="message" value="${param.message}"/>
 
   <c:if test="${alert != null}">
-    <div class="alert alert-${alert}">
+    <div class="alert alert-${alert} alert-slide-in">
         ${message}
     </div>
   </c:if>

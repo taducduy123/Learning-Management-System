@@ -51,4 +51,9 @@ public class StudentService implements IStudentService {
     public Student getStudentByAccountID(int account_id) {
         return studentRepo.getStudentByAccountID(account_id);
     }
+
+    @Override
+    public void editProfile(Student student) {
+        studentRepo.edit(student);
+    }
 }

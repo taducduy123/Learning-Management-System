@@ -118,4 +118,38 @@ public class ManagerRepo implements IManagerRepo {
 
         return manager;
     }
+
+
+    @Override
+    public void edit(Manager manager) {
+        if (manager == null) {
+            throw new IllegalArgumentException("Manager cannot be null");
+        }
+
+        try {
+            dbConnect.openConnection();
+
+            String sql = """
+                    update manager
+                    set first_name = ?,
+                        middle_name = ?,
+                        last_name = ?,
+                        email = ?,
+                        phone = ?
+                    where manager_id = ?;
+                    """;
+
+            dbConnect.executeVoidQuery(sql,
+                    manager.getFirst_name(),
+                    manager.getMiddle_name(),
+                    manager.getLast_name(),
+                    manager.getEmail(),
+                    manager.getPhone(),
+                    manager.getUser_id());
+
+            dbConnect.closeResources();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
