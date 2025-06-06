@@ -14,4 +14,5 @@ public interface IAccountService {
     int getMaxAccountID();
     void createAccount(Account account);
     void resetPassword(Account account, String user_email);
+    void changePassword(Account account, String new_password, String user_email);
 }

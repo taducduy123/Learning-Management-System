@@ -1,6 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
+<title>Edit Student</title>
+
+
 <c:set var="student" value="${requestScope['student']}"/>
 <c:set var="account" value="${requestScope['account']}"/>
 
@@ -21,8 +24,6 @@
   </c:if>
 </div>
 <div>
-
-
   <form action="${pageContext.request.contextPath}/controllers/manager/StudentController/edit?action=save&student_id=<c:out value="${student.getUser_id()}"/>&account_id=<c:out value="${student.getAccount_id()}"/>" method="post">
     <input type="hidden" name="account_id" value="${account.getAccount_id()}">
     <input type="hidden" name="role" value="${account.getRole()}">

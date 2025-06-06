@@ -12,6 +12,7 @@ import com.javaweb.training_center_lms.repository.Impl.StudentRepo;
 import com.javaweb.training_center_lms.service.IAccountService;
 import com.javaweb.training_center_lms.utils.EmailUtil;
 import com.javaweb.training_center_lms.utils.RandomGeneratorUtil;
+import com.javaweb.training_center_lms.utils.TimeUtil;
 
 public class AccountService implements IAccountService {
     private static final IAccountRepo accountRepo = new AccountRepo();
@@ -19,6 +20,7 @@ public class AccountService implements IAccountService {
     private static final IInstructorRepo instructorRepo = new InstructorRepo();
     private static final RandomGeneratorUtil randomGeneratorUtil = RandomGeneratorUtil.getInstance();
     private static final EmailUtil emailUtil = new EmailUtil();
+    private static final TimeUtil timeUtil = TimeUtil.getInstance();
 
     @Override
     public boolean checkAccountExistenceByRole_Username_Password(Account account) {
@@ -130,5 +132,87 @@ public class AccountService implements IAccountService {
                 "</body>\n" +
                 "</html>", newPassword);
         emailUtil.hostSendMailToUser(user_email, subject, message);
+    }
+
+
+    @Override
+    public void changePassword(Account account, String new_password, String user_email) {
+        if (account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
+        }
+        if (!checkAccountExistenceByUsername(account)) {
+            return;
+        }
+
+        // Update database
+        accountRepo.changePassword(account, new_password);
+
+        // Send notification
+        String timeModified = timeUtil.getCurrentTime();
+        String subject = "Password Change Log";
+        String content = String.format("<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "  <meta charset=\"UTF-8\">\n" +
+                "  <style>\n" +
+                "    body {\n" +
+                "      background-color: #f8f9fa;\n" +
+                "      font-family: Arial, sans-serif;\n" +
+                "      padding-top: 50px;\n" +
+                "      margin: 0;\n" +
+                "    }\n" +
+                "\n" +
+                "    .log-card {\n" +
+                "      background-color: #ffffff;\n" +
+                "      border: 1px solid #ddd;\n" +
+                "      border-radius: 6px;\n" +
+                "      max-width: 600px;\n" +
+                "      margin: 0 auto;\n" +
+                "      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\n" +
+                "    }\n" +
+                "\n" +
+                "    .card-header {\n" +
+                "      background-color: #28a745;\n" +
+                "      color: white;\n" +
+                "      padding: 16px;\n" +
+                "      border-top-left-radius: 6px;\n" +
+                "      border-top-right-radius: 6px;\n" +
+                "    }\n" +
+                "\n" +
+                "    .card-body {\n" +
+                "      padding: 20px;\n" +
+                "      color: #333;\n" +
+                "    }\n" +
+                "\n" +
+                "    .text-muted {\n" +
+                "      color: #6c757d;\n" +
+                "    }\n" +
+                "\n" +
+                "    h4 {\n" +
+                "      margin: 0;\n" +
+                "    }\n" +
+                "\n" +
+                "    p {\n" +
+                "      margin: 8px 0;\n" +
+                "    }\n" +
+                "  </style>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "  <div class=\"log-card\">\n" +
+                "    <div class=\"card-header\">\n" +
+                "      <h4>Password Change Notification</h4>\n" +
+                "    </div>\n" +
+                "    <div class=\"card-body\">\n" +
+                "      <p>Your password has been successfully changed. Your new password is <b>%s</b></p>\n" +
+                "      <p class=\"text-muted\">\n" +
+                "        <strong>Modified on: </strong><span><b>%s</b></span>\n" +
+                "      </p>\n" +
+                "    </div>\n" +
+                "  </div>\n" +
+                "\n" +
+                "</body>\n" +
+                "</html>", new_password, timeModified);
+        emailUtil.hostSendMailToUser(user_email, subject, content);
     }
 }

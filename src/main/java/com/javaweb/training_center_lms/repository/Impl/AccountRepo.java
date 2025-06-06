@@ -362,4 +362,22 @@ public class AccountRepo implements IAccountRepo {
             throw new RuntimeException(e);
         }
     }
+
+
+    @Override
+    public void changePassword(Account account, String newPassword) {
+        try {
+            dbConnect.openConnection();
+
+            String sql = """
+                    update account
+                    set password = ?
+                    where username = ?;
+                    """;
+
+            dbConnect.executeVoidQuery(sql, newPassword, account.getUsername());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

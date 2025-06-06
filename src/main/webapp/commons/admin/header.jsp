@@ -20,9 +20,10 @@
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li><a class="dropdown-item" href="#">Profile</a></li>
                 <li><a class="dropdown-item" href="#">Secure Account</a></li>
-                <li><a class="dropdown-item" href="#">Change Password</a></li>
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/controllers/ChangePasswordController" target="_blank">Change Password</a></li>
                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/controllers/LoginController?action=logout">Log out</a></li>
             </ul>
         </div>
     </div>
 </nav>
+

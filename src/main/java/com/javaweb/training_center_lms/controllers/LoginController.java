@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 @WebServlet(urlPatterns = {"/controllers/LoginController/*"})
 public class LoginController extends BaseController {
 
-    private final int remember_expire = 60;
+    private final int remember_expire = 60 * 60;
 
     private final IAccountService accountService = new AccountService();
     private final IManagerService managerService = new ManagerService();
@@ -43,12 +43,6 @@ public class LoginController extends BaseController {
         }
         switch (action) {
             case "login":
-                String role_C = cookieUtil.getValue("role_C", req);
-                String username_C = cookieUtil.getValue("username_C", req);
-                String password_C = cookieUtil.getValue("password_C", req);
-                req.setAttribute("role_C", role_C);
-                req.setAttribute("username_C", username_C);
-                req.setAttribute("password_C", password_C);
                 forwardResquestTo("/views/login.jsp", req, resp);
                 break;
             case "logout":

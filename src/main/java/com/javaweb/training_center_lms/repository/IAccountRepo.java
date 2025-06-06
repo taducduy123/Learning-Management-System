@@ -13,4 +13,5 @@ public interface IAccountRepo {
     int getMaxAccountID();
     void createAccount(Account account);
     void resetPassword(Account account, String newPassword);
+    void changePassword(Account account, String newPassword);
 }

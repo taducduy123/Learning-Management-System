@@ -1,4 +1,6 @@
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<title>Create Student</title>
+
 <div>
     <c:set var="alert" value="${param.alert}"/>
     <c:set var="message" value="${param.message}"/>

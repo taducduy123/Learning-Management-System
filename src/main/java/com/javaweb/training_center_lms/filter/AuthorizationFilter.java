@@ -15,7 +15,8 @@ import java.io.IOException;
 
 public class AuthorizationFilter implements Filter {
 
-    private final SessionUtil sessionUtil = SessionUtil.getInstance();
+    private static final SessionUtil sessionUtil = SessionUtil.getInstance();
+    private static final String default_URL = "/controllers/LoginController/login?action=login";
 
 
     @Override
@@ -38,50 +39,65 @@ public class AuthorizationFilter implements Filter {
 
 
         if (url.startsWith("/controllers/manager")) {                   // Authentication & Authorization with manager
-            // Check if the user is authenticated
-            if (account != null) {
+            // 1. Authentication
+            if (account != null && user != null) {
+                // 2. Authorization
                 if (account.getRole().equalsIgnoreCase("manager")) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
                     System.out.println("You are not permitted to access this page...");
-                    BaseController.responseRedirectTo("/controllers/LoginController/login?action=login", request, response);
+                    BaseController.responseRedirectTo(default_URL, request, response);
                 }
             } else {
                 System.out.println("You are not authenticated...");
-                BaseController.responseRedirectTo("/controllers/LoginController/login?action=login", request, response);
+                BaseController.responseRedirectTo(default_URL, request, response);
             }
         }
         else if (url.startsWith("/controllers/instructor")) {         // Authentication & Authorization with instructor
-            // Check if the user is authenticated
+            // 1. Authentication
             if (account != null && user != null) {
-                if (account.getRole().equalsIgnoreCase("instructor") && !((Instructor) user).isBlocked()) {     // check if user is blocked
+                // 2. Authorization
+                if (account.getRole().equalsIgnoreCase("instructor") && !((Instructor) user).isBlocked()) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
                     System.out.println("You are not permitted to access this page...");
-                    BaseController.responseRedirectTo("/controllers/LoginController/login?action=login", request, response);
+                    BaseController.responseRedirectTo(default_URL, request, response);
                 }
             } else {
                 System.out.println("You are not authenticated...");
-                BaseController.responseRedirectTo("/controllers/LoginController/login?action=login", request, response);
+                BaseController.responseRedirectTo(default_URL, request, response);
             }
         }
         else if (url.startsWith("/controllers/student")) {         // Authentication & Authorization with student
-            // Check if the user is authenticated
+            // 1. Authentication
             if (account != null && user != null) {
-                if (account.getRole().equalsIgnoreCase("student") && !((Student) user).isBlocked()) {           // check if user is blocked
+                // 2. Authorization
+                if (account.getRole().equalsIgnoreCase("student") && !((Student) user).isBlocked()) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
                     System.out.println("You are not permitted to access this page...");
-                    BaseController.responseRedirectTo("/controllers/LoginController/login?action=login", request, response);
+                    BaseController.responseRedirectTo(default_URL, request, response);
                 }
             } else {
                 System.out.println("You are not authenticated...");
-                BaseController.responseRedirectTo("/controllers/LoginController/login?action=login", request, response);
+                BaseController.responseRedirectTo(default_URL, request, response);
+            }
+        }
+        else if (url.startsWith("/controllers/ChangePasswordController")) {
+            // 1. Authentication
+            if (account != null && user != null) {
+                // 2. Authorization
+                filterChain.doFilter(servletRequest, servletResponse);
+            } else {
+                System.out.println("You are not authenticated...");
+                BaseController.responseRedirectTo(default_URL, request, response);
             }
         }
         else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
+
+
     }
 
     @Override

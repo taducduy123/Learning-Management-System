@@ -9,12 +9,12 @@
           integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
 
-    <title>Document</title>
+    <title>Login</title>
 </head>
 <body>
-<c:set var="role_C" value="${requestScope['role_C']}"/>
-<c:set var="username_C" value="${requestScope['username_C']}"/>
-<c:set var="password_C" value="${requestScope['password_C']}"/>
+<c:set var="role_C" value="${cookie.role_C.value}"/>
+<c:set var="username_C" value="${cookie.username_C.value}"/>
+<c:set var="password_C" value="${cookie.password_C.value}"/>
 
 <div class="card col-10 h-100 d-flex flex-row justify-content-center m-auto">
     <div class="w-50">
