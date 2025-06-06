@@ -1,0 +1,19 @@
+body {
+    background: linear-gradient(to right, #74ebd5, #acb6e5);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+.card {
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    background-color: white;
+    width: 100%;
+    max-width: 500px;
+}
+.form-label {
+    font-weight: 500;
+}

@@ -65,6 +65,8 @@ public class LoginController extends BaseController {
         String password = req.getParameter("password").trim();
         Account account = accountService.getAccountByRole_Username_Password(role, username, password);
 
+        System.out.println("account = " + account);
+
         // Authenticate user
         if (!accountService.checkAccountExistenceByRole_Username_Password(account)) {
             //Show alert

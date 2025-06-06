@@ -211,6 +211,7 @@ public class StudentController extends BaseController {
         String phone = req.getParameter("phone");
 
         Account account = Account.builder()
+                .account_id(account_id)
                 .username(username)
                 .password(password)
                 .role("student")

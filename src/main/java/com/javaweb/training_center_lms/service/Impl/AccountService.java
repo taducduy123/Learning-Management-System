@@ -215,4 +215,26 @@ public class AccountService implements IAccountService {
                 "</html>", new_password, timeModified);
         emailUtil.hostSendMailToUser(user_email, subject, content);
     }
+
+    @Override
+    public void registerAccount(Account account) {
+        if(account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
+        }
+        if(!account.getRole().equalsIgnoreCase("student")){
+            throw new IllegalArgumentException("Only students are allowed to register accounts");
+        }
+        if(checkAccountExistenceByUsername(account)){
+            throw new IllegalArgumentException("Account already exists");
+        }
+
+        // Update database
+        int account_id_to_insert = accountRepo.getMaxAccountID() + 1;
+        Student student_to_insert = Student.builder()
+                .account_id(account_id_to_insert)
+                .build();
+        account.setAccount_id(account_id_to_insert);
+        accountRepo.createAccount(account);
+        studentRepo.create(student_to_insert);
+    }
 }

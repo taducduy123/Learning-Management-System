@@ -99,7 +99,7 @@ public class AccountRepo implements IAccountRepo {
             }
             dbConnect.closeResources();
 
-            // Update if student exist
+            // Update if account exist
             if (exists) {
                 dbConnect.openConnection();
                 sql = """
@@ -117,7 +117,7 @@ public class AccountRepo implements IAccountRepo {
                         account.getPassword(),
                         account.getAccount_id());
                 dbConnect.closeResources();
-            } else { // Insert if student not exist
+            } else { // Insert if account not exist
                 dbConnect.openConnection();
                 sql = """
                         insert into account(account_id, role, username, password)
@@ -187,11 +187,12 @@ public class AccountRepo implements IAccountRepo {
             // Create a new account if not exist
             dbConnect.openConnection();
             sql = """
-                    insert into account(role, username, password)
+                    insert into account(account_id, role, username, password)
                     values
-                    (?, ?, ?);
+                    (?, ?, ?, ?);
                     """;
             dbConnect.executeVoidQuery(sql,
+                    account.getAccount_id(),
                     account.getRole(),
                     account.getUsername(),
                     account.getPassword());
@@ -380,4 +381,6 @@ public class AccountRepo implements IAccountRepo {
             throw new RuntimeException(e);
         }
     }
+
+
 }

@@ -13,15 +13,20 @@
     </div>
     <div class="col-12 col-md-5 col-lg-8 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
         <div class="dropdown me-5">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+            <button class="btn btn-secondary dropdown-toggle" style="min-width: 150px;" type="button"
+                    id="dropdownMenuButton"
                     data-toggle="dropdown" aria-expanded="false">
-                Hello, ${sessionScope.user.last_name}
+                Hello, ${sessionScope.user.last_name == null ? 'anonymous' : sessionScope.user.last_name}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><a class="dropdown-item" href="#">Edit Profile</a></li>
                 <li><a class="dropdown-item" href="#">Secure Account</a></li>
-                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/controllers/ChangePasswordController" target="_blank">Change Password</a></li>
-                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/controllers/LoginController?action=logout">Log out</a></li>
+                <li><a class="dropdown-item"
+                       href="${pageContext.request.contextPath}/controllers/ChangePasswordController" target="_blank">Change
+                    Password</a></li>
+                <li><a class="dropdown-item"
+                       href="${pageContext.request.contextPath}/controllers/LoginController?action=logout">Log out</a>
+                </li>
             </ul>
         </div>
     </div>

@@ -50,7 +50,7 @@
         </form>
         <hr>
         <div class="text-center">
-            Don't have an account? <a href="">Register New Account</a>
+            Don't have an account? <a href="${pageContext.request.contextPath}/controllers/RegisterController">Register New Account</a>
         </div>
 
     </div>
